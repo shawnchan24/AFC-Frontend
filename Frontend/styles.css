@@ -24,7 +24,7 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(173, 216, 230, 0.9); /* Light Blue */
   padding: 10px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -127,8 +127,8 @@ form button:hover {
 }
 
 /* Testimonies */
-.testimony-container, .gallery {
-  background: rgba(255, 255, 255, 0.9);
+.testimony-container {
+  background: rgba(173, 216, 230, 0.9); /* Light Blue */
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -136,7 +136,7 @@ form button:hover {
 }
 
 .testimony-item {
-  background: rgba(240, 240, 240, 0.9);
+  background: rgba(255, 255, 255, 0.9); /* White */
   padding: 15px;
   border-radius: 5px;
   margin: 10px 0;
@@ -161,7 +161,7 @@ form button:hover {
   justify-content: space-between;
   padding: 20px;
   margin-top: 60px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(173, 216, 230, 0.9); /* Light Blue */
   border-radius: 10px;
 }
 
@@ -178,11 +178,12 @@ form button:hover {
   text-align: center;
   padding: 10px;
   border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.9); /* White */
 }
 
 .day-info {
   flex: 1;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9); /* White */
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -193,13 +194,21 @@ form button:hover {
   width: 100%;
   border-radius: 10px;
   margin-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item {
+  background: rgba(255, 255, 255, 0.9); /* White */
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 
 /* Footer */
 footer {
   text-align: center;
   padding: 10px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(173, 216, 230, 0.9); /* Light Blue */
   border-top: 1px solid #ddd;
   margin-top: 20px;
 }
