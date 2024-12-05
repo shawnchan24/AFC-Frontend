@@ -1,21 +1,22 @@
 /* General Styling */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f0f2f5;
   margin: 0;
   padding: 0;
+  background: url('assets/AFC_Photo.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: #333;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-h1, h2 {
-  color: #007BFF;
-  margin: 0;
+.container {
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 /* Navbar */
@@ -23,29 +24,28 @@ h1, h2 {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 0;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  padding: 10px 20px;
 }
 
 .nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  font-weight: bold;
+  font-size: 1.8rem;
   color: #007BFF;
-  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .nav-links {
   list-style: none;
   display: flex;
-  margin: 0;
-  padding: 0;
 }
 
 .nav-links li {
@@ -55,117 +55,114 @@ h1, h2 {
 .nav-links a {
   color: #333;
   text-decoration: none;
-  padding: 5px 10px;
+  padding: 10px 15px;
   border-radius: 5px;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s ease;
 }
 
 .nav-links a:hover {
-  background-color: #e3f2fd;
+  background-color: #007BFF;
+  color: white;
 }
 
-/* Homepage Feed */
-.homepage-content {
-  margin-top: 60px;
-  padding: 20px;
+/* Page Header */
+.page-header h1 {
+  font-size: 2rem;
+  color: #007BFF;
 }
 
-.feed {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+.page-header p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.page-header hr {
   margin: 20px 0;
+  border: 0;
+  height: 1px;
+  background: #ddd;
 }
 
-.feed h2 {
-  margin-bottom: 10px;
-}
-
-.event-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-.event-cards div {
-  background: #fff;
-  padding: 15px;
+/* Card Styling */
+.card {
+  background: white;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: calc(33% - 20px);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.event-cards div:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+.card h2 {
+  color: #007BFF;
+  margin-bottom: 15px;
 }
 
-.event-cards img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-/* Carousel */
-.carousel {
-  position: relative;
-  width: 80%;
-  margin: 20px auto;
-  overflow: hidden;
-}
-
-.carousel-track-container {
-  overflow: hidden;
-}
-
-.carousel-track {
+/* Form Styling */
+form .form-group {
+  margin-bottom: 15px;
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.carousel-track li {
-  min-width: 100%;
-  list-style: none;
-}
-
-.carousel img {
+form input, form textarea, form button {
   width: 100%;
-  border-radius: 10px;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
-.carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+form button {
+  background-color: #007BFF;
   color: white;
   border: none;
-  padding: 10px;
   cursor: pointer;
-  z-index: 100;
-  border-radius: 50%;
+  transition: background-color 0.3s ease;
 }
 
-.carousel-button.prev {
-  left: 10px;
+form button:hover {
+  background-color: #0056b3;
 }
 
-.carousel-button.next {
-  right: 10px;
+/* Testimonies */
+.testimony-container, .gallery {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Calendar Layout */
+.testimony-item {
+  background: rgba(240, 240, 240, 0.9);
+  padding: 15px;
+  border-radius: 5px;
+  margin: 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.testimony-item p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.testimony-item small {
+  display: block;
+  margin-top: 5px;
+  color: #555;
+}
+
+/* Calendar Table */
 .calendar-content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 20px;
   margin-top: 60px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
 }
 
 .calendar-header {
@@ -185,15 +182,31 @@ h1, h2 {
 
 .day-info {
   flex: 1;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Gallery */
+.gallery-item img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
 /* Dark Mode */
 body.dark-mode {
-  background-color: #121212;
+  background: #121212;
   color: #e0e0e0;
 }
 
@@ -201,11 +214,7 @@ body.dark-mode .navbar {
   background-color: #1e1e1e;
 }
 
-body.dark-mode .feed, body.dark-mode .day-info {
-  background-color: #1e1e1e;
-  color: #e0e0e0;
-}
-
-body.dark-mode .nav-links a:hover {
+body.dark-mode a, body.dark-mode .button {
+  color: white;
   background-color: #333;
 }

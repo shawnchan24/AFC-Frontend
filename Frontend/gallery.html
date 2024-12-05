@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery - Apostolic Fellowship Church</title>
+  <title>Gallery - AFC</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,22 +14,29 @@
         <li><a href="calendar.html">Calendar</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="testimonies.html">Testimonies</a></li>
-        <li><a href="admin.html" id="adminNav" style="display: none;">Admin Panel</a></li>
-        <li><a href="index.html" onclick="logout()">Logout</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
     </div>
   </nav>
-  <main>
-    <section class="carousel">
-      <button class="carousel-button prev">&lt;</button>
-      <div class="carousel-track-container">
-        <ul class="carousel-track">
-          <!-- Gallery items will be dynamically loaded here -->
-        </ul>
+  <div class="container">
+    <header class="page-header">
+      <h1>Photo & Video Gallery</h1>
+      <p>Explore moments from our church events.</p>
+    </header>
+    <main>
+      <div class="gallery">
+        <h2>Gallery Highlights</h2>
+        <div class="gallery-item">
+          <img src="assets/event1.jpg" alt="Community Event">
+          <p>Community Outreach</p>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/event2.jpg" alt="Christmas Service">
+          <p>Christmas Celebration</p>
+        </div>
       </div>
-      <button class="carousel-button next">&gt;</button>
-    </section>
-  </main>
+    </main>
+  </div>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>

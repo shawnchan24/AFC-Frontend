@@ -3,30 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage - Apostolic Fellowship Church</title>
+  <title>Homepage - AFC</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-container">
-      <a href="homepage.html" class="logo">AFC</a>
+      <a href="#" class="logo">AFC</a>
       <ul class="nav-links">
         <li><a href="calendar.html">Calendar</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="testimonies.html">Testimonies</a></li>
-        <li><a href="admin.html" id="adminNav" style="display: none;">Admin Panel</a></li>
-        <li><a href="index.html" onclick="logout()">Logout</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
     </div>
   </nav>
-  <main class="homepage-content">
-    <section class="feed">
-      <h2>Latest Events</h2>
-      <div id="eventFeed" class="event-cards">
-        <!-- Events will be dynamically loaded here -->
+  <div class="container">
+    <header class="page-header">
+      <h1>Welcome to the Homepage</h1>
+      <p>Explore our features below:</p>
+    </header>
+    <main>
+      <div class="feed">
+        <h2>Latest Events</h2>
+        <div id="eventFeed" class="feed-items">
+          <div class="feed-item">
+            <h3>Community Outreach</h3>
+            <p>Join us as we give back to the community with food drives and prayers. <strong>Saturday, Dec 16, 2024, at 9:00 AM</strong></p>
+          </div>
+          <div class="feed-item">
+            <h3>Christmas Candlelight Service</h3>
+            <p>Celebrate the birth of Christ with carols and a special sermon. <strong>Monday, Dec 25, 2024, at 7:00 PM</strong></p>
+          </div>
+        </div>
       </div>
-    </section>
-  </main>
+    </main>
+  </div>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
