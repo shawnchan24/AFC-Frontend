@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Apostolic Fellowship Church</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-panel">
+  <header>
+    <h1>Admin Panel</h1>
+  </header>
+  <main>
+    <!-- Add Event Form -->
+    <section>
+      <h2>Add New Event</h2>
+      <form id="addEventForm">
+        <input type="text" id="eventTitle" placeholder="Event Title" required>
+        <input type="date" id="eventDate" required>
+        <textarea id="eventDescription" placeholder="Event Description" required></textarea>
+        <button type="submit">Add Event</button>
+      </form>
+    </section>
+
+    <!-- Event List -->
+    <section>
+      <h2>Manage Events</h2>
+      <ul id="eventList">
+        <!-- Event items will be dynamically loaded here -->
+      </ul>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    // Check admin authentication
+    if (!localStorage.getItem("isAdmin")) {
+      alert("Access denied! Admins only.");
+      window.location.href = "index.html";
+    } else {
+      loadAllEvents(); // Load events when the admin panel is accessed
+    }
+  </script>
+</body>
+</html>

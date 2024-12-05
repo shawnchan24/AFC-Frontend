@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apostolic Fellowship Church - Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="homepage">
+  <header>
+    <img src="assets/church_logo.png" alt="Church Logo" class="logo">
+    <h1>Welcome to Apostolic Fellowship Church</h1>
+  </header>
+  <main class="homepage-main">
+    <button onclick="navigateTo('calendar.html')">Church Calendar</button>
+    <button onclick="navigateTo('gallery.html')">Church Photos</button>
+    <button onclick="navigateTo('testimonies.html')">Testimonies</button>
+  </main>
+  <footer>
+    <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
+  </footer>
+</body>
+<script>
+  function navigateTo(page) {
+    window.location.href = page;
+  }
+</script>
+</html>

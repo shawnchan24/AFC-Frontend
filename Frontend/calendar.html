@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Calendar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Church Calendar</h1>
+  </header>
+  <main class="calendar-container">
+    <div class="calendar">
+      <div class="calendar-header">
+        <button id="prevYear" class="nav-button"><<</button>
+        <button id="prevMonth" class="nav-button"><</button>
+        <span id="currentMonthYear"></span>
+        <button id="nextMonth" class="nav-button">></button>
+        <button id="nextYear" class="nav-button">>></button>
+      </div>
+      <table class="calendar-table">
+        <thead>
+          <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+        </thead>
+        <tbody id="calendarBody">
+          <!-- Calendar days will be generated here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="day-info">
+      <h2>Day Information</h2>
+      <p id="selectedDate">Select a date</p>
+      <div id="eventDetails">
+        <!-- Event details will be dynamically added here -->
+      </div>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
