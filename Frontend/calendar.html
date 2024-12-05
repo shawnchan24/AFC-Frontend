@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Calendar</title>
+  <title>Calendar - Apostolic Fellowship Church</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Church Calendar</h1>
-  </header>
-  <main class="calendar-container">
-    <div class="calendar">
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">AFC</a>
+      <ul class="nav-links">
+        <li><a href="calendar.html">Calendar</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="testimonies.html">Testimonies</a></li>
+        <li><a href="admin.html" id="adminNav" style="display: none;">Admin Panel</a></li>
+        <li><a href="index.html" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="calendar-content">
+    <section class="calendar">
       <div class="calendar-header">
         <button id="prevYear" class="nav-button"><<</button>
         <button id="prevMonth" class="nav-button"><</button>
@@ -32,18 +41,21 @@
           </tr>
         </thead>
         <tbody id="calendarBody">
-          <!-- Calendar days will be generated here -->
+          <!-- Calendar days will be dynamically loaded here -->
         </tbody>
       </table>
-    </div>
-    <div class="day-info">
+    </section>
+    <section class="day-info">
       <h2>Day Information</h2>
       <p id="selectedDate">Select a date</p>
       <div id="eventDetails">
-        <!-- Event details will be dynamically added here -->
+        <!-- Events for the selected day will be dynamically loaded here -->
       </div>
-    </div>
+    </section>
   </main>
+  <footer>
+    <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
+  </footer>
   <script src="script.js"></script>
 </body>
 </html>

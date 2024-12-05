@@ -3,26 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apostolic Fellowship Church - Home</title>
+  <title>Homepage - Apostolic Fellowship Church</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="homepage">
-  <header>
-    <img src="assets/church_logo.png" alt="Church Logo" class="logo">
-    <h1>Welcome to Apostolic Fellowship Church</h1>
-  </header>
-  <main class="homepage-main">
-    <button onclick="navigateTo('calendar.html')">Church Calendar</button>
-    <button onclick="navigateTo('gallery.html')">Church Photos</button>
-    <button onclick="navigateTo('testimonies.html')">Testimonies</button>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="homepage.html" class="logo">AFC</a>
+      <ul class="nav-links">
+        <li><a href="calendar.html">Calendar</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="testimonies.html">Testimonies</a></li>
+        <li><a href="admin.html" id="adminNav" style="display: none;">Admin Panel</a></li>
+        <li><a href="index.html" onclick="logout()">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main class="homepage-content">
+    <section class="feed">
+      <h2>Latest Events</h2>
+      <div id="eventFeed" class="event-cards">
+        <!-- Events will be dynamically loaded here -->
+      </div>
+    </section>
   </main>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
+  <script src="script.js"></script>
 </body>
-<script>
-  function navigateTo(page) {
-    window.location.href = page;
-  }
-</script>
 </html>
