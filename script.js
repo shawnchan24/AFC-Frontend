@@ -5,6 +5,14 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const pin = document.getElementById("pin").value.trim();
 
+  // Admin bypass for login
+  if (email === "shawnchan24@gmail.com" && pin === "1532") {
+    alert("Welcome, Admin!");
+    window.location.href = "admin.html";
+    return;
+  }
+
+  // Regular user login logic
   try {
     const response = await fetch("http://localhost:5500/login", {
       method: "POST",
@@ -16,10 +24,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
 
     if (response.ok) {
       const data = await response.json();
-      if (data.isAdmin) {
-        alert("Welcome, Admin!");
-        window.location.href = "admin.html";
-      } else if (data.isApproved) {
+      if (data.isApproved) {
         alert("Login successful!");
         window.location.href = "homepage.html";
       } else {
