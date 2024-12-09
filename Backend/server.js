@@ -1,17 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
+const cors = require("cors"); // Import cors
 const path = require("path");
 require("dotenv").config();
 
-// Import Models and Routes
 const User = require("./models/User");
 const pendingUsersRoutes = require("./routes/pendingUsersRoutes");
-const announcementRoutes = require("./routes/announcementRoutes");
-const churchEventRoutes = require("./routes/churchEventRoutes"); // Updated route
-const donationRoutes = require("./routes/donationRoutes");
+const Announcement = require("./models/Announcement");
+const Event = require("./models/Event");
+const Donation = require("./models/Donation");
 
 const app = express();
+
+// CORS configuration
+const corsOptions = {
+  origin: ["https://theafc.life", "http://localhost:5500"], // Allow these origins
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
+  credentials: true, // Allow cookies and authentication headers
+};
+app.use(cors(corsOptions)); // Use CORS middleware
+
 app.use(express.json());
 
 // Configure Nodemailer
@@ -32,41 +41,20 @@ mongoose
 // Serve static files
 app.use(express.static(path.join(__dirname, "Frontend")));
 
-// API Routes
-app.use("/pending-users", pendingUsersRoutes);
-app.use("/api/announcements", announcementRoutes);
-app.use("/api/church-events", churchEventRoutes); // Updated route
-app.use("/api/donations", donationRoutes);
-
-// User Registration Route
-app.post("/register", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).send("User already exists.");
-
-    const newUser = await User.create({ email, password, approved: false });
-    await transporter.sendMail({
-      from: process.env.EMAIL,
-      to: process.env.ADMIN_EMAIL,
-      subject: "New User Registration",
-      text: `A new user has registered: ${email}. Please log in to approve or reject this user.`,
-    });
-
-    res.status(201).send("User registered. Awaiting admin approval.");
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).send("Registration failed.");
-  }
+// Root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "Frontend", "index.html"));
 });
 
-// Admin Login Route
+// Routes
+app.use("/pending-users", pendingUsersRoutes);
+
+// User login route
 app.post("/login", async (req, res) => {
   const { email, pin } = req.body;
 
   if (email === process.env.ADMIN_EMAIL && pin === "1532") {
-    return res.status(200).send("Admin login successful.");
+    return res.status(200).json({ isAdmin: true });
   }
 
   try {
@@ -75,7 +63,7 @@ app.post("/login", async (req, res) => {
     if (!user.approved) return res.status(403).send("User not approved.");
 
     if (pin === "1234") {
-      return res.status(200).send("User login successful.");
+      return res.status(200).json({ isApproved: true });
     } else {
       return res.status(400).send("Invalid credentials.");
     }
@@ -85,16 +73,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Serve Frontend
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "Frontend", "index.html"));
-});
-
 // Fallback route for non-existent routes
 app.use((req, res) => {
   res.status(404).send("Page not found.");
 });
 
-// Start Server
-const PORT = process.env.PORT || 5500;
+// Start the server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://127.0.0.1:${PORT}`));
