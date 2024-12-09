@@ -4,68 +4,112 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - AFC</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css"> <!-- Updated Path -->
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="homepage.html" class="logo">AFC</a>
-      <ul class="nav-links">
-        <li><a href="calendar.html">Calendar</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="testimonies.html">Testimonies</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
-      </ul>
-    </div>
-  </nav>
   <div class="container">
     <header class="page-header">
       <h1>Admin Panel</h1>
-      <p>Manage events and updates for the church community.</p>
-      <hr>
+      <p>Manage user registrations and app settings.</p>
     </header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">AFC Admin</div>
+        <ul class="nav-links">
+          <li><a href="homepage.html">Home</a></li>
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
     <main>
-      <!-- Add New Event Section -->
-      <div class="card">
-        <h2>Add New Event</h2>
-        <form id="addEventForm">
-          <div class="form-group">
-            <label for="eventTitle">Event Title:</label>
-            <input type="text" id="eventTitle" placeholder="Enter event title" required>
-          </div>
-          <div class="form-group">
-            <label for="eventDate">Event Date:</label>
-            <input type="date" id="eventDate" required>
-          </div>
-          <div class="form-group">
-            <label for="eventDescription">Event Description:</label>
-            <textarea id="eventDescription" placeholder="Enter event details" rows="3" required></textarea>
-          </div>
-          <button type="submit">Add Event</button>
-        </form>
-      </div>
-
-      <!-- Manage Events Section -->
-      <div class="card">
-        <h2>Manage Events</h2>
-        <div id="eventList" class="event-list">
-          <!-- Dynamic Event List -->
-          <div class="event-item">
-            <h3>Sample Event Title</h3>
-            <p><strong>Date:</strong> 2024-12-10</p>
-            <p><strong>Description:</strong> This is a sample event description.</p>
-            <div class="event-actions">
-              <button class="edit-button">Edit</button>
-              <button class="delete-button">Delete</button>
-            </div>
-          </div>
+      <section class="card">
+        <h2>Pending User Approvals</h2>
+        <div id="userRequests">
+          <p>Loading user requests...</p>
         </div>
-      </div>
+      </section>
+      <section class="card">
+        <h2>App Settings</h2>
+        <p>Customize app appearance and settings here.</p>
+      </section>
     </main>
   </div>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="script.js"></script>
+  <script>
+    const baseURL = "http://localhost:5000"; // Base URL for API requests
+
+    // Fetch pending user requests from the backend
+    async function loadUserRequests() {
+      try {
+        const response = await fetch(`${baseURL}/pending-users`);
+        if (!response.ok) throw new Error("Failed to fetch pending users.");
+        
+        const users = await response.json();
+        const userRequestsDiv = document.getElementById("userRequests");
+
+        if (users.length === 0) {
+          userRequestsDiv.innerHTML = "<p>No pending user approvals.</p>";
+          return;
+        }
+
+        userRequestsDiv.innerHTML = ""; // Clear existing content
+        users.forEach((user) => {
+          const userDiv = document.createElement("div");
+          userDiv.className = "user-request";
+
+          userDiv.innerHTML = `
+            <p><strong>Email:</strong> ${user.email}</p>
+            <button onclick="approveUser('${user._id}')">Approve</button>
+            <button onclick="rejectUser('${user._id}')">Reject</button>
+          `;
+
+          userRequestsDiv.appendChild(userDiv);
+        });
+      } catch (error) {
+        console.error("Error loading user requests:", error);
+        document.getElementById("userRequests").innerHTML = "<p>Error loading user requests.</p>";
+      }
+    }
+
+    // Approve user
+    async function approveUser(userId) {
+      try {
+        const response = await fetch(`${baseURL}/approve-user/${userId}`, { method: "POST" });
+        if (!response.ok) throw new Error("Failed to approve user.");
+        
+        alert("User approved successfully.");
+        loadUserRequests(); // Reload the list of users
+      } catch (error) {
+        console.error("Error approving user:", error);
+        alert("Failed to approve user.");
+      }
+    }
+
+    // Reject user
+    async function rejectUser(userId) {
+      try {
+        const response = await fetch(`${baseURL}/reject-user/${userId}`, { method: "POST" });
+        if (!response.ok) throw new Error("Failed to reject user.");
+        
+        alert("User rejected successfully.");
+        loadUserRequests(); // Reload the list of users
+      } catch (error) {
+        console.error("Error rejecting user:", error);
+        alert("Failed to reject user.");
+      }
+    }
+
+    // Logout functionality
+    function logout() {
+      localStorage.clear();
+      alert("You have logged out.");
+      window.location.href = "index.html";
+    }
+
+    // Load pending users on page load
+    document.addEventListener("DOMContentLoaded", loadUserRequests);
+  </script>
 </body>
 </html>
