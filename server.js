@@ -53,11 +53,13 @@ app.use("/pending-users", pendingUsersRoutes);
 app.post("/login", async (req, res) => {
   const { email, pin } = req.body;
 
+  // Check if the admin is logging in
   if (email === process.env.ADMIN_EMAIL && pin === "1532") {
     return res.status(200).json({ isAdmin: true });
   }
 
   try {
+    // Check for non-admin users
     const user = await User.findOne({ email });
     if (!user) return res.status(404).send("User not found.");
     if (!user.approved) return res.status(403).send("User not approved.");
@@ -70,6 +72,72 @@ app.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).send("Login failed.");
+  }
+});
+
+// Announcements API
+app.post("/api/announcements", async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const announcement = await Announcement.create({ title, content });
+    res.status(201).json(announcement);
+  } catch (error) {
+    console.error("Error creating announcement:", error);
+    res.status(500).send("Failed to create announcement.");
+  }
+});
+
+app.get("/api/announcements", async (req, res) => {
+  try {
+    const announcements = await Announcement.find();
+    res.status(200).json(announcements);
+  } catch (error) {
+    console.error("Error fetching announcements:", error);
+    res.status(500).send("Failed to fetch announcements.");
+  }
+});
+
+// Events API
+app.post("/api/events", async (req, res) => {
+  try {
+    const { title, mediaUrl, description } = req.body;
+    const event = await Event.create({ title, mediaUrl, description });
+    res.status(201).json(event);
+  } catch (error) {
+    console.error("Error creating event:", error);
+    res.status(500).send("Failed to create event.");
+  }
+});
+
+app.get("/api/events", async (req, res) => {
+  try {
+    const events = await Event.find();
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Error fetching events:", error);
+    res.status(500).send("Failed to fetch events.");
+  }
+});
+
+// Donations API
+app.post("/api/donations", async (req, res) => {
+  try {
+    const { name, email, amount, purpose } = req.body;
+    const donation = await Donation.create({ name, email, amount, purpose });
+    res.status(201).json(donation);
+  } catch (error) {
+    console.error("Error creating donation:", error);
+    res.status(500).send("Failed to process donation.");
+  }
+});
+
+app.get("/api/donations", async (req, res) => {
+  try {
+    const donations = await Donation.find();
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("Error fetching donations:", error);
+    res.status(500).send("Failed to fetch donations.");
   }
 });
 
