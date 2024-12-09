@@ -21,7 +21,9 @@ const corsOptions = {
 };
 app.use(cors(corsOptions)); // Use CORS middleware
 
+// Middleware for JSON parsing
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Ensure form submissions are parsed properly
 
 // Configure Nodemailer
 const transporter = nodemailer.createTransport({
@@ -49,27 +51,33 @@ app.get("/", (req, res) => {
 // Routes
 app.use("/pending-users", pendingUsersRoutes);
 
-// User login route
+// Fix for 405 error in login route
 app.post("/login", async (req, res) => {
   const { email, pin } = req.body;
 
-  if (email === process.env.ADMIN_EMAIL && pin === "1532") {
-    return res.status(200).json({ isAdmin: true });
-  }
-
   try {
+    // Check if the admin is logging in
+    if (email === process.env.ADMIN_EMAIL && pin === "1532") {
+      return res.status(200).json({ isAdmin: true });
+    }
+
+    // Check for other users
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send("User not found.");
-    if (!user.approved) return res.status(403).send("User not approved.");
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+    if (!user.approved) {
+      return res.status(403).json({ message: "User not approved." });
+    }
 
     if (pin === "1234") {
       return res.status(200).json({ isApproved: true });
     } else {
-      return res.status(400).send("Invalid credentials.");
+      return res.status(400).json({ message: "Invalid credentials." });
     }
   } catch (error) {
     console.error("Error logging in:", error);
-    res.status(500).send("Login failed.");
+    res.status(500).json({ message: "Login failed." });
   }
 });
 
