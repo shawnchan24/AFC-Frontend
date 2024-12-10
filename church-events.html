@@ -3,21 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Events</title>
+  <title>Church Events - Apostolic Fellowship Church</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Church Events</h1>
-  </header>
-  <main>
-    <div id="churchEvents">
-      <p>Loading church events...</p>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">AFC</a>
+      <ul class="nav-links">
+        <li><a href="calendar.html">Calendar</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="church-events.html" class="active">Church Events</a></li>
+      </ul>
     </div>
+  </nav>
+
+  <main class="container">
+    <header>
+      <h1>Church Events</h1>
+      <p>Discover upcoming and ongoing events at AFC.</p>
+    </header>
+    <section id="churchEvents">
+      <p>Loading church events...</p>
+    </section>
   </main>
+
   <footer>
-    <p>&copy; 2024 Apostolic Fellowship Church</p>
+    <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="script.js"></script>
+
+  <script>
+    async function loadChurchEvents() {
+      try {
+        const response = await fetch("http://localhost:5500/api/church-events");
+        if (!response.ok) throw new Error("Failed to load events.");
+        const events = await response.json();
+        const container = document.getElementById("churchEvents");
+        container.innerHTML = events.map(event => `
+          <div class="card">
+            <h3>${event.title}</h3>
+            <p>${event.description}</p>
+            <img src="${event.mediaUrl}" alt="${event.title}">
+          </div>
+        `).join("");
+      } catch (error) {
+        console.error("Error loading events:", error);
+        document.getElementById("churchEvents").textContent = "Failed to load events.";
+      }
+    }
+
+    loadChurchEvents();
+  </script>
 </body>
 </html>

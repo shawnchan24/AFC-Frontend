@@ -4,55 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendar - Apostolic Fellowship Church</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-container">
-      <a href="homepage.html" class="logo">AFC</a>
+      <a href="index.html" class="logo">AFC</a>
       <ul class="nav-links">
-        <li><a href="calendar.html">Calendar</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="testimonies.html">Testimonies</a></li>
-        <li><a href="admin.html" id="adminNav" style="display: none;">Admin Panel</a></li>
-        <li><a href="index.html" onclick="logout()">Logout</a></li>
+        <li><a href="calendar.html" class="active">Calendar</a></li>
       </ul>
     </div>
   </nav>
+
   <main class="calendar-content">
+    <header>
+      <h1>Church Calendar</h1>
+      <p>Stay updated with our schedule of events and services.</p>
+    </header>
     <section class="calendar">
-      <div class="calendar-header">
-        <button id="prevYear" class="nav-button"><<</button>
-        <button id="prevMonth" class="nav-button"><</button>
-        <span id="currentMonthYear"></span>
-        <button id="nextMonth" class="nav-button">></button>
-        <button id="nextYear" class="nav-button">>></button>
-      </div>
-      <table class="calendar-table">
-        <thead>
-          <tr>
-            <th>Sun</th>
-            <th>Mon</th>
-            <th>Tue</th>
-            <th>Wed</th>
-            <th>Thu</th>
-            <th>Fri</th>
-            <th>Sat</th>
-          </tr>
-        </thead>
-        <tbody id="calendarBody">
-          <!-- Calendar days will be dynamically loaded here -->
-        </tbody>
-      </table>
-    </section>
-    <section class="day-info">
-      <h2>Day Information</h2>
-      <p id="selectedDate">Select a date</p>
-      <div id="eventDetails">
-        <!-- Events for the selected day will be dynamically loaded here -->
-      </div>
+      <!-- Calendar structure -->
     </section>
   </main>
+
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>

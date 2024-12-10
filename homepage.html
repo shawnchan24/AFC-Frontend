@@ -3,45 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Homepage - AFC</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Homepage - Apostolic Fellowship Church</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="#" class="logo">AFC</a>
+      <a href="index.html" class="logo">AFC</a>
       <ul class="nav-links">
         <li><a href="calendar.html">Calendar</a></li>
         <li><a href="gallery.html">Gallery</a></li>
         <li><a href="testimonies.html">Testimonies</a></li>
+        <li><a href="giving.html">Giving</a></li>
+        <li><a href="past-events.html">Past Events</a></li>
+        <li><a href="livestream.html">Livestream</a></li>
         <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
     </div>
   </nav>
+
+  <!-- Main Content -->
   <div class="container">
     <header class="page-header">
-      <h1>Welcome to the Homepage</h1>
-      <p>Explore our features below:</p>
+      <h1>Welcome to Apostolic Fellowship Church</h1>
+      <p>Explore our features and stay connected with our church community.</p>
     </header>
     <main>
-      <div class="feed">
+      <!-- Announcements Banner -->
+      <div id="announcementBanner" class="announcements-banner">
+        Welcome to AFC! Upcoming Event: Christmas Candlelight Service - Dec 25, 2024.
+      </div>
+
+      <!-- Latest Events Section -->
+      <section class="feed">
         <h2>Latest Events</h2>
         <div id="eventFeed" class="feed-items">
-          <div class="feed-item">
-            <h3>Community Outreach</h3>
-            <p>Join us as we give back to the community with food drives and prayers. <strong>Saturday, Dec 16, 2024, at 9:00 AM</strong></p>
-          </div>
-          <div class="feed-item">
-            <h3>Christmas Candlelight Service</h3>
-            <p>Celebrate the birth of Christ with carols and a special sermon. <strong>Monday, Dec 25, 2024, at 7:00 PM</strong></p>
-          </div>
+          <p>Loading latest events...</p>
         </div>
-      </div>
+      </section>
+
+      <!-- Church Features Section -->
+      <section class="features">
+        <h2>Explore Our Features</h2>
+        <div class="features-grid">
+          <a href="calendar.html" class="feature-card">
+            <h3>Church Calendar</h3>
+            <p>Stay updated on all upcoming church events.</p>
+          </a>
+          <a href="gallery.html" class="feature-card">
+            <h3>Gallery</h3>
+            <p>View photos and memories from our community.</p>
+          </a>
+          <a href="testimonies.html" class="feature-card">
+            <h3>Testimonies</h3>
+            <p>Read and share how God has worked in your life.</p>
+          </a>
+          <a href="giving.html" class="feature-card">
+            <h3>Giving</h3>
+            <p>Contribute to our mission and building fund.</p>
+          </a>
+          <a href="past-events.html" class="feature-card">
+            <h3>Past Events</h3>
+            <p>Explore videos and photos from our past events.</p>
+          </a>
+          <a href="livestream.html" class="feature-card">
+            <h3>Livestream</h3>
+            <p>Join us live for sermons and special services.</p>
+          </a>
+        </div>
+      </section>
     </main>
   </div>
+
+  <!-- Footer -->
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="script.js"></script>
+
+  <!-- JavaScript -->
+  <script>
+    async function loadLatestEvents() {
+      try {
+        const response = await fetch("http://localhost:5500/api/events");
+        if (!response.ok) throw new Error("Failed to fetch events.");
+        const events = await response.json();
+        const eventFeed = document.getElementById("eventFeed");
+
+        if (events.length === 0) {
+          eventFeed.innerHTML = "<p>No upcoming events available.</p>";
+          return;
+        }
+
+        eventFeed.innerHTML = events
+          .slice(0, 2) // Show only the latest 2 events
+          .map(event => `
+            <div class="feed-item">
+              <h3>${event.title}</h3>
+              <p>${event.description}</p>
+              <p><strong>${new Date(event.date).toLocaleString()}</strong></p>
+            </div>
+          `)
+          .join("");
+      } catch (error) {
+        console.error("Error loading events:", error);
+        document.getElementById("eventFeed").innerHTML = "<p>Failed to load events.</p>";
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      alert("You have logged out.");
+      window.location.href = "index.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadLatestEvents();
+    });
+  </script>
 </body>
 </html>

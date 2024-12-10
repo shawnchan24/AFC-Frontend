@@ -1,19 +1,54 @@
-<form id="donationForm">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="number" name="amount" placeholder="Amount" required>
-    <select name="purpose">
-      <option value="Tithes">Tithes</option>
-      <option value="Building Fund">Building Fund</option>
-    </select>
-    <button type="submit">Give</button>
-  </form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giving - Apostolic Fellowship Church</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">AFC</a>
+      <ul class="nav-links">
+        <li><a href="calendar.html">Calendar</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="giving.html" class="active">Giving</a></li>
+        <li><a href="livestream.html">Livestream</a></li>
+        <li><a href="testimonies.html">Testimonies</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <header>
+      <h1>Giving</h1>
+      <p>Your contributions help us build a better future together.</p>
+    </header>
+    <section>
+      <form id="donationForm">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="number" name="amount" placeholder="Amount (USD)" required>
+        <select name="purpose">
+          <option value="Tithes">Tithes</option>
+          <option value="Building Fund">Building Fund</option>
+        </select>
+        <button type="submit">Give</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
+  </footer>
+
   <script>
     document.getElementById("donationForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData);
-  
+
       try {
         const response = await fetch("http://localhost:5500/api/donations", {
           method: "POST",
@@ -26,4 +61,5 @@
       }
     });
   </script>
-  
+</body>
+</html>
