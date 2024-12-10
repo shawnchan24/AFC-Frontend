@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Testimonies - AFC</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <nav class="navbar">
@@ -13,7 +13,7 @@
       <ul class="nav-links">
         <li><a href="calendar.html">Calendar</a></li>
         <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="testimonies.html">Testimonies</a></li>
+        <li><a href="testimonies.html" class="active">Testimonies</a></li>
         <li><a href="#" onclick="logout()">Logout</a></li>
       </ul>
     </div>
@@ -25,26 +25,15 @@
       <hr>
     </header>
     <main>
-      <!-- Post a Testimony Section -->
       <div class="testimony-container">
         <h2>Post a Testimony</h2>
         <textarea id="testimonyText" placeholder="Write your testimony here..." rows="4"></textarea>
         <button id="postTestimony">Post Testimony</button>
       </div>
-      <!-- Recent Testimonies Section -->
       <div class="testimony-container">
         <h2>Recent Testimonies</h2>
-        <div class="testimony-item">
-          <p>"The power of prayer at AFC changed my life! I found faith and purpose."</p>
-          <small>- Sarah Brown</small>
-        </div>
-        <div class="testimony-item">
-          <p>"The sermons and community have truly inspired me to grow closer to God."</p>
-          <small>- Michael Lee</small>
-        </div>
-        <div class="testimony-item">
-          <p>"AFC has been a beacon of hope for me and my family during tough times."</p>
-          <small>- Jessica Green</small>
+        <div id="testimoniesFeed">
+          <p>Loading testimonies...</p>
         </div>
       </div>
     </main>
@@ -52,6 +41,53 @@
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="script.js"></script>
+  <script>
+    async function loadTestimonies() {
+      try {
+        const response = await fetch("http://localhost:5000/api/testimonies");
+        if (!response.ok) throw new Error("Failed to fetch testimonies.");
+        const testimonies = await response.json();
+        const feed = document.getElementById("testimoniesFeed");
+
+        feed.innerHTML = testimonies
+          .map(
+            (testimony) => `
+          <div class="testimony-item">
+            <p>"${testimony.text}"</p>
+            <small>- ${testimony.author || "Anonymous"}</small>
+          </div>
+        `
+          )
+          .join("");
+      } catch (error) {
+        console.error("Error loading testimonies:", error);
+        document.getElementById("testimoniesFeed").innerHTML = "<p>Failed to load testimonies.</p>";
+      }
+    }
+
+    document.getElementById("postTestimony")?.addEventListener("click", async () => {
+      const testimonyText = document.getElementById("testimonyText").value.trim();
+      if (!testimonyText) return alert("Please write a testimony.");
+
+      try {
+        const response = await fetch("http://localhost:5000/api/testimonies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: testimonyText }),
+        });
+
+        if (response.ok) {
+          alert("Testimony posted successfully!");
+          loadTestimonies();
+        } else {
+          alert("Failed to post testimony.");
+        }
+      } catch (error) {
+        console.error("Error posting testimony:", error);
+      }
+    });
+
+    loadTestimonies();
+  </script>
 </body>
 </html>

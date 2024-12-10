@@ -55,98 +55,17 @@ body {
     color: #fff;
 }
 
-/* Input Styling */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: rgba(240, 248, 255, 0.9); /* Light Blue */
-}
-
-input:focus,
-textarea:focus {
-    outline: none;
-    border-color: #007BFF;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
-}
-
-/* Button Styling */
-input[type="submit"],
-button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover,
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Error Messages */
-.error-message {
-    color: red;
-    font-size: 0.9rem;
-}
-
-/* Card Styling */
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card h2 {
-    color: #007BFF;
-    margin-bottom: 15px;
-}
-
-/* Gallery */
-.gallery-item img {
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.gallery-item {
-    background: rgba(255, 255, 255, 0.9); /* White */
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 10px;
-    background: rgba(173, 216, 230, 0.9); /* Light Blue */
-    border-top: 1px solid #ddd;
-    margin-top: 20px;
-}
-
 /* Announcements Banner */
 .announcements-banner {
     width: 100%;
-    position: fixed;
+    position: relative;
     top: 0;
+    z-index: 10;
     background-color: #f39c12;
     color: #fff;
     text-align: center;
     padding: 10px 0;
     font-size: 1rem;
-    z-index: 2000;
     animation: bannerColors 5s infinite;
 }
 
@@ -158,20 +77,36 @@ footer {
     100% { background-color: #e74c3c; }
 }
 
-/* Dark Mode (Optional) */
-body.dark-mode {
-    background: #121212;
-    color: #e0e0e0;
+/* Feed Styling */
+.feed-item {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-body.dark-mode .navbar {
-    background-color: #1e1e1e;
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
 }
 
-body.dark-mode a,
-body.dark-mode .button {
-    color: #fff;
-    background-color: #333;
+.feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background-color: rgba(240, 248, 255, 1);
 }
 
 /* Past Events Styling */
@@ -209,38 +144,42 @@ body.dark-mode .button {
     color: #666;
 }
 
-/* Features Grid */
-.features {
-    margin: 20px 0;
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.feature-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
+/* Gallery Styling */
+.gallery-item img {
+    width: 100%;
     border-radius: 10px;
-    text-align: center;
-    text-decoration: none;
-    color: #333;
+    margin-bottom: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.feature-card:hover {
-    transform: translateY(-5px);
-    background-color: rgba(240, 248, 255, 1);
-}
-
-/* Feed Styling */
-.feed-item {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+.gallery-item {
+    background: rgba(255, 255, 255, 0.9); /* White */
+    padding: 10px;
     border-radius: 10px;
     margin-bottom: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: rgba(173, 216, 230, 0.9); /* Light Blue */
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+/* Dark Mode (Optional) */
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode .navbar {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode a,
+body.dark-mode .button {
+    color: #fff;
+    background-color: #333;
 }

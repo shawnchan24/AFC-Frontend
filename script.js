@@ -5,20 +5,16 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const pin = document.getElementById("pin").value.trim();
 
-  // Admin bypass for login
   if (email === "shawnchan24@gmail.com" && pin === "1532") {
     alert("Welcome, Admin!");
     window.location.href = "admin.html";
     return;
   }
 
-  // Regular user login logic
   try {
-    const response = await fetch("http://localhost:5500/login", {
+    const response = await fetch("http://localhost:5000/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, pin }),
     });
 
@@ -46,36 +42,69 @@ function logout() {
   window.location.href = "index.html";
 }
 
-// Load Events for Homepage Feed
-async function loadAllEvents() {
+// Load Latest Events for Homepage Feed
+async function loadLatestEvents() {
   try {
-    const response = await fetch("http://localhost:5500/api/calendar");
+    const response = await fetch("http://localhost:5000/api/events");
     if (!response.ok) throw new Error("Failed to fetch events.");
-    const events = await response.json();
 
+    const events = await response.json();
     const eventFeed = document.getElementById("eventFeed");
+
+    if (events.length === 0) {
+      eventFeed.innerHTML = "<p>No upcoming events available.</p>";
+      return;
+    }
+
     eventFeed.innerHTML = events
+      .slice(0, 2)
       .map(
         (event) => `
       <div class="feed-item">
         <h3>${event.title}</h3>
-        <p>${event.date}</p>
         <p>${event.description}</p>
+        <p><strong>${new Date(event.date).toLocaleString()}</strong></p>
       </div>
     `
       )
       .join("");
   } catch (error) {
     console.error("Error loading events:", error);
-    document.getElementById("eventFeed").innerHTML = "<p>Error loading events.</p>";
+    document.getElementById("eventFeed").innerHTML = "<p>Failed to load events.</p>";
   }
 }
 
-// Load pending users on admin page load
+// Load Past Events
+async function loadPastEvents() {
+  try {
+    const response = await fetch("http://localhost:5000/api/past-events");
+    if (!response.ok) throw new Error("Failed to load past events.");
+
+    const events = await response.json();
+    const container = document.getElementById("pastEvents");
+    container.innerHTML = events
+      .map(
+        (event) => `
+      <div class="card">
+        <h3>${event.title}</h3>
+        <p>${event.description}</p>
+        <img src="${event.mediaUrl}" alt="${event.title}" style="width: 100%; border-radius: 10px;">
+      </div>
+    `
+      )
+      .join("");
+  } catch (error) {
+    console.error("Error loading past events:", error);
+    document.getElementById("pastEvents").textContent = "Failed to load events.";
+  }
+}
+
+// Load Pending User Requests for Admin Panel
 async function loadUserRequests() {
   try {
-    const response = await fetch("http://localhost:5500/pending-users");
-    if (!response.ok) throw new Error("Failed to fetch pending users.");
+    const response = await fetch("http://localhost:5000/api/admin/pending-users");
+    if (!response.ok) throw new Error("Failed to fetch pending user requests.");
+
     const users = await response.json();
     const userRequestsDiv = document.getElementById("userRequests");
 
@@ -84,34 +113,32 @@ async function loadUserRequests() {
       return;
     }
 
-    userRequestsDiv.innerHTML = ""; // Clear existing content
-    users.forEach((user) => {
-      const userDiv = document.createElement("div");
-      userDiv.className = "user-request";
-
-      userDiv.innerHTML = `
+    userRequestsDiv.innerHTML = users
+      .map(
+        (user) => `
+      <div class="user-request">
         <p><strong>Email:</strong> ${user.email}</p>
         <button onclick="approveUser('${user._id}')">Approve</button>
         <button onclick="rejectUser('${user._id}')">Reject</button>
-      `;
-
-      userRequestsDiv.appendChild(userDiv);
-    });
+      </div>
+    `
+      )
+      .join("");
   } catch (error) {
     console.error("Error loading user requests:", error);
     document.getElementById("userRequests").innerHTML = "<p>Error loading user requests.</p>";
   }
 }
 
-// Approve user
+// Approve User Functionality
 async function approveUser(userId) {
   try {
-    const response = await fetch(`http://localhost:5500/approve-user/${userId}`, {
+    const response = await fetch(`http://localhost:5000/api/admin/approve-user/${userId}`, {
       method: "POST",
     });
     if (response.ok) {
       alert("User approved successfully.");
-      loadUserRequests(); // Reload user requests
+      loadUserRequests();
     } else {
       alert("Failed to approve user.");
     }
@@ -120,15 +147,15 @@ async function approveUser(userId) {
   }
 }
 
-// Reject user
+// Reject User Functionality
 async function rejectUser(userId) {
   try {
-    const response = await fetch(`http://localhost:5500/reject-user/${userId}`, {
+    const response = await fetch(`http://localhost:5000/api/admin/reject-user/${userId}`, {
       method: "POST",
     });
     if (response.ok) {
       alert("User rejected successfully.");
-      loadUserRequests(); // Reload user requests
+      loadUserRequests();
     } else {
       alert("Failed to reject user.");
     }
@@ -137,8 +164,9 @@ async function rejectUser(userId) {
   }
 }
 
-// Event Listeners for Calendar and Initialization
+// Initialize Events on Page Load
 document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("eventFeed")) loadLatestEvents();
+  if (document.getElementById("pastEvents")) loadPastEvents();
   if (document.getElementById("userRequests")) loadUserRequests();
-  if (document.getElementById("eventFeed")) loadAllEvents();
 });

@@ -36,15 +36,16 @@
   <script>
     async function loadPastEvents() {
       try {
-        const response = await fetch("http://localhost:5500/api/events");
+        const response = await fetch("http://localhost:5000/api/events");
         if (!response.ok) throw new Error("Failed to load events.");
         const events = await response.json();
         const container = document.getElementById("pastEvents");
+
         container.innerHTML = events.map(event => `
           <div class="card">
             <h3>${event.title}</h3>
             <p>${event.description}</p>
-            <img src="${event.mediaUrl}" alt="${event.title}">
+            <img src="${event.mediaUrl}" alt="${event.title}" class="event-image">
           </div>
         `).join("");
       } catch (error) {

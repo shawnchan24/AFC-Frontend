@@ -14,7 +14,7 @@
     </header>
     <nav class="navbar">
       <div class="nav-container">
-        <div class="logo">AFC Admin</div>
+        <a href="homepage.html" class="logo">AFC Admin</a>
         <ul class="nav-links">
           <li><a href="homepage.html">Home</a></li>
           <li><a href="#" onclick="logout()">Logout</a></li>
@@ -30,13 +30,16 @@
       </section>
       <section class="card">
         <h2>App Settings</h2>
-        <p>Customize app appearance and settings here.</p>
+        <div>
+          <p>Customize app appearance and settings here.</p>
+          <button onclick="alert('App settings functionality coming soon!')">Edit Settings</button>
+        </div>
       </section>
     </main>
   </div>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="admin-script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
