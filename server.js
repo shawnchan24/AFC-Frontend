@@ -4,7 +4,6 @@ const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 
-const User = require("./models/User");
 const Event = require("./models/Event");
 
 const app = express();
@@ -25,7 +24,7 @@ app.use(express.static(path.join(__dirname, "Frontend")));
 // Database Connection
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
+  .then(() => console.log("Frontend connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
 
 // Root Route
@@ -47,7 +46,7 @@ app.route("/api/events")
   })
   .get(async (req, res) => {
     try {
-      const events = await Event.find();
+      const events = await Event.find().sort({ date: -1 });
       res.status(200).json(events);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -57,4 +56,4 @@ app.route("/api/events")
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running at http://127.0.0.1:${PORT}`));
+app.listen(PORT, () => console.log(`Frontend server running at http://localhost:${PORT}`));

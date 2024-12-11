@@ -15,14 +15,14 @@ const app = express();
 // Configure CORS Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5500", "https://theafc.life"], // Allow local and production domains
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-    credentials: true, // Allow cookies and authentication headers
+    origin: ["http://localhost:5500", "https://theafc.life"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
 
-app.use(express.json()); // Parse JSON requests
-app.use(express.static(path.join(__dirname, "Frontend"))); // Serve static files from the frontend directory
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "Frontend")));
 
 // Configure Nodemailer for email notifications
 const transporter = nodemailer.createTransport({
@@ -36,10 +36,10 @@ const transporter = nodemailer.createTransport({
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("Connected to MongoDB"))
+  .then(() => console.log("Backend connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
 
-// Root Route (Serve the homepage)
+// Root Route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "Frontend", "index.html"));
 });
@@ -48,7 +48,6 @@ app.get("/", (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, pin } = req.body;
 
-  // Admin login bypass
   if (email === process.env.ADMIN_EMAIL && pin === "1532") {
     return res.status(200).json({ isAdmin: true });
   }
@@ -69,7 +68,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// API Routes for Events
+// Events API
 app.route("/api/events")
   .post(async (req, res) => {
     try {
@@ -83,7 +82,7 @@ app.route("/api/events")
   })
   .get(async (req, res) => {
     try {
-      const events = await Event.find().sort({ date: -1 }); // Sort events by most recent
+      const events = await Event.find().sort({ date: -1 });
       res.status(200).json(events);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -91,7 +90,7 @@ app.route("/api/events")
     }
   });
 
-// API Route for Pending Users
+// Pending User Approvals API
 app.get("/api/admin/pending-users", async (req, res) => {
   try {
     const users = await User.find({ approved: false });
@@ -132,7 +131,6 @@ app.post("/api/donations", async (req, res) => {
     const { name, email, amount, purpose } = req.body;
     const donation = await Donation.create({ name, email, amount, purpose });
 
-    // Send confirmation email
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: email,
@@ -149,4 +147,4 @@ app.post("/api/donations", async (req, res) => {
 
 // Start the Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Backend server running at http://localhost:${PORT}`));
