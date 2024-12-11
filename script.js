@@ -1,45 +1,95 @@
-// Base URL for API requests
-const BASE_URL = "https://theafc.life"; // Ensure this matches your backend deployment URL
+const BASE_URL = "https://theafc.life"; // Replace with your actual backend URL
 
-// Load Pending User Requests for Admin Panel
+// Registration
+document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+
+  try {
+    const response = await fetch(`${BASE_URL}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    if (response.ok) {
+      alert("Registration successful. Pending admin approval.");
+    } else {
+      const data = await response.json();
+      alert(data.message || "Registration failed.");
+    }
+  } catch (error) {
+    console.error("Error registering user:", error);
+    alert("Failed to register. Please try again.");
+  }
+});
+
+// Admin login
+document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const pin = document.getElementById("pin").value.trim();
+
+  try {
+    const response = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, pin }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.isAdmin) {
+        alert("Welcome, Admin!");
+        window.location.href = "admin.html";
+      } else {
+        alert("Login successful!");
+        window.location.href = "homepage.html";
+      }
+    } else {
+      alert("Invalid email or PIN.");
+    }
+  } catch (error) {
+    console.error("Error logging in:", error);
+    alert("Failed to log in. Please try again.");
+  }
+});
+
+// Load pending users for admin
 async function loadUserRequests() {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/pending-users`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch pending user requests. Status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error("Failed to fetch pending users.");
 
     const users = await response.json();
     const userRequestsDiv = document.getElementById("userRequests");
 
     if (users.length === 0) {
       userRequestsDiv.innerHTML = "<p>No pending user approvals.</p>";
-      return;
+    } else {
+      userRequestsDiv.innerHTML = users
+        .map(
+          (user) => `
+        <div class="user-request">
+          <p><strong>Email:</strong> ${user.email}</p>
+          <button onclick="approveUser('${user._id}')">Approve</button>
+          <button onclick="rejectUser('${user._id}')">Reject</button>
+        </div>
+      `
+        )
+        .join("");
     }
-
-    userRequestsDiv.innerHTML = users
-      .map(
-        (user) => `
-      <div class="user-request">
-        <p><strong>Email:</strong> ${user.email}</p>
-        <button onclick="approveUser('${user._id}')">Approve</button>
-        <button onclick="rejectUser('${user._id}')">Reject</button>
-      </div>
-    `
-      )
-      .join("");
   } catch (error) {
     console.error("Error loading user requests:", error);
-    document.getElementById("userRequests").innerHTML = "<p>Error loading user requests. Please try again later.</p>";
+    document.getElementById("userRequests").innerHTML = "<p>Error loading user requests.</p>";
   }
 }
 
-// Approve User Functionality
 async function approveUser(userId) {
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, {
-      method: "POST",
-    });
+    const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, { method: "POST" });
     if (response.ok) {
       alert("User approved successfully.");
       loadUserRequests();
@@ -51,12 +101,9 @@ async function approveUser(userId) {
   }
 }
 
-// Reject User Functionality
 async function rejectUser(userId) {
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, {
-      method: "POST",
-    });
+    const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, { method: "POST" });
     if (response.ok) {
       alert("User rejected successfully.");
       loadUserRequests();
@@ -68,7 +115,8 @@ async function rejectUser(userId) {
   }
 }
 
-// Initialize on Page Load
 document.addEventListener("DOMContentLoaded", () => {
-  if (document.getElementById("userRequests")) loadUserRequests();
+  if (document.getElementById("userRequests")) {
+    loadUserRequests();
+  }
 });

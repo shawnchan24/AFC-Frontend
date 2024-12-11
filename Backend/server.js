@@ -1,23 +1,24 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const nodemailer = require("nodemailer");
 const cors = require("cors");
 require("dotenv").config();
 
 const User = require("./models/User");
+const nodemailer = require("nodemailer");
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Database connection
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((error) => console.error("MongoDB connection error:", error));
 
-// Configure Nodemailer
+// Nodemailer setup
 const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
@@ -26,24 +27,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Register a new user
-app.post("/api/register", async (req, res) => {
+// User registration
+app.post("/register", async (req, res) => {
   const { email } = req.body;
+
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists." });
-    }
+    if (existingUser) return res.status(400).json({ message: "User already exists." });
 
-    const newUser = new User({ email, pin: "1234" });
-    await newUser.save();
+    const user = new User({ email, pin: "1234" });
+    await user.save();
 
     // Notify admin
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: process.env.ADMIN_EMAIL,
       subject: "New User Registration",
-      text: `A new user has registered with the email: ${email}. Please log in to the admin dashboard to approve or reject the user.`,
+      text: `A new user has registered: ${email}`,
     });
 
     res.status(201).json({ message: "Registration successful. Pending admin approval." });
@@ -53,48 +53,81 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// Admin fetch pending users
+// Login
+app.post("/login", async (req, res) => {
+  const { email, pin } = req.body;
+
+  if (email === process.env.ADMIN_EMAIL && pin === "1532") {
+    return res.status(200).json({ isAdmin: true });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    if (!user.approved) return res.status(403).json({ message: "User not approved." });
+
+    if (pin === "1153") {
+      return res.status(200).json({ message: "Login successful." });
+    } else {
+      return res.status(400).json({ message: "Invalid PIN." });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Login failed." });
+  }
+});
+
+// Admin routes for managing users
 app.get("/api/admin/pending-users", async (req, res) => {
   try {
     const users = await User.find({ approved: false });
     res.status(200).json(users);
   } catch (error) {
     console.error("Error fetching pending users:", error);
-    res.status(500).json({ message: "Error fetching pending users." });
+    res.status(500).json({ message: "Failed to fetch pending users." });
   }
 });
 
-// Admin approve user
 app.post("/api/admin/approve-user/:id", async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findByIdAndUpdate(userId, { approved: true, pin: "1153" }, { new: true });
+    await User.findByIdAndUpdate(userId, { approved: true, pin: "1153" });
+
+    const user = await User.findById(userId);
 
     // Notify user
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: user.email,
-      subject: "Approval Notification",
-      text: "Your account has been approved! You can now log in using your permanent pin: 1153.",
+      subject: "Account Approved",
+      text: "Your account has been approved. You can now log in with your email and PIN: 1153",
     });
 
     res.status(200).json({ message: "User approved successfully." });
   } catch (error) {
     console.error("Error approving user:", error);
-    res.status(500).json({ message: "Error approving user." });
+    res.status(500).json({ message: "Failed to approve user." });
   }
 });
 
-// Admin reject user
 app.post("/api/admin/reject-user/:id", async (req, res) => {
   try {
     const userId = req.params.id;
-    await User.findByIdAndDelete(userId);
+    const user = await User.findByIdAndDelete(userId);
+
+    // Notify user
+    await transporter.sendMail({
+      from: process.env.EMAIL,
+      to: user.email,
+      subject: "Account Rejected",
+      text: "Your account has been rejected. Please contact support for more information.",
+    });
 
     res.status(200).json({ message: "User rejected successfully." });
   } catch (error) {
     console.error("Error rejecting user:", error);
-    res.status(500).json({ message: "Error rejecting user." });
+    res.status(500).json({ message: "Failed to reject user." });
   }
 });
 
