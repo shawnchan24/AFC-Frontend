@@ -3,27 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Apostolic Fellowship Church</title>
+  <title>Login or Register - Apostolic Fellowship Church</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
     <header class="page-header">
       <h1>Welcome to Apostolic Fellowship Church</h1>
-      <p>Please log in to access the app.</p>
+      <p>Login or register to access the app.</p>
     </header>
     <main>
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="pin" placeholder="Pin" required>
-        <button type="submit">Login</button>
-      </form>
-      <p id="loginError" class="error-message"></p>
+      <!-- Login Form -->
+      <section>
+        <h2>Login</h2>
+        <form id="loginForm">
+          <input type="email" id="loginEmail" placeholder="Email" required>
+          <input type="password" id="loginPin" placeholder="Pin" required>
+          <button type="submit">Login</button>
+        </form>
+        <p id="loginError" class="error-message"></p>
+      </section>
+
+      <hr>
+
+      <!-- Register Form -->
+      <section>
+        <h2>Register</h2>
+        <form id="registerForm">
+          <input type="email" id="registerEmail" placeholder="Enter your email" required>
+          <button type="submit">Register</button>
+        </form>
+        <p id="registerSuccess" class="success-message"></p>
+      </section>
     </main>
   </div>
   <footer>
     <p>&copy; 2024 Apostolic Fellowship Church. All Rights Reserved.</p>
   </footer>
-  <script src="script.js"></script>
 </body>
 </html>
