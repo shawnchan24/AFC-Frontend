@@ -80,7 +80,7 @@ async function loadLatestEvents() {
 // Load Past Events
 async function loadPastEvents() {
   try {
-    const response = await fetch(`${BASE_URL}/api/past-events`);
+    const response = await fetch(`${BASE_URL}/api/events`);
     if (!response.ok) throw new Error("Failed to load past events.");
 
     const events = await response.json();

@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Static file serving for the frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../index.html")));
 
 // MongoDB connection
 mongoose
@@ -34,7 +34,7 @@ app.use("/api/testimonies", testimonyRoutes); // Testimonies routes
 
 // Serve the frontend
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(__dirname, "..index.html"));
 });
 
 module.exports = app;
