@@ -1,3 +1,6 @@
+// Base URL for API requests
+const BASE_URL = "https://theafc.life"; // Update for production deployment
+
 // Login Functionality
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -12,7 +15,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/login", {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, pin }),
@@ -45,7 +48,7 @@ function logout() {
 // Load Latest Events for Homepage Feed
 async function loadLatestEvents() {
   try {
-    const response = await fetch("http://localhost:5000/api/events");
+    const response = await fetch(`${BASE_URL}/api/events`);
     if (!response.ok) throw new Error("Failed to fetch events.");
 
     const events = await response.json();
@@ -77,7 +80,7 @@ async function loadLatestEvents() {
 // Load Past Events
 async function loadPastEvents() {
   try {
-    const response = await fetch("http://localhost:5000/api/past-events");
+    const response = await fetch(`${BASE_URL}/api/past-events`);
     if (!response.ok) throw new Error("Failed to load past events.");
 
     const events = await response.json();
@@ -102,7 +105,7 @@ async function loadPastEvents() {
 // Load Pending User Requests for Admin Panel
 async function loadUserRequests() {
   try {
-    const response = await fetch("http://localhost:5000/api/admin/pending-users");
+    const response = await fetch(`${BASE_URL}/api/admin/pending-users`);
     if (!response.ok) throw new Error("Failed to fetch pending user requests.");
 
     const users = await response.json();
@@ -133,7 +136,7 @@ async function loadUserRequests() {
 // Approve User Functionality
 async function approveUser(userId) {
   try {
-    const response = await fetch(`http://localhost:5000/api/admin/approve-user/${userId}`, {
+    const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, {
       method: "POST",
     });
     if (response.ok) {
@@ -150,7 +153,7 @@ async function approveUser(userId) {
 // Reject User Functionality
 async function rejectUser(userId) {
   try {
-    const response = await fetch(`http://localhost:5000/api/admin/reject-user/${userId}`, {
+    const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, {
       method: "POST",
     });
     if (response.ok) {
