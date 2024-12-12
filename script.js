@@ -1,4 +1,4 @@
-const BASE_URL = "https://theafc.life"; // Replace with your actual backend URL
+const BASE_URL = "https://alo-backend-1.onrender.com"; // Updated backend URL
 
 // Registration
 document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
