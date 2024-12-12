@@ -4,7 +4,7 @@ const BASE_URL = "https://alo-backend-1.onrender.com"; // Updated backend URL
 document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
 
   try {
     const response = await fetch(`${BASE_URL}/register`, {
@@ -14,7 +14,8 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
     });
 
     if (response.ok) {
-      alert("Registration successful. Pending admin approval.");
+      document.getElementById("registerSuccess").textContent =
+        "Registration successful. Pending admin approval.";
     } else {
       const data = await response.json();
       alert(data.message || "Registration failed.");
@@ -25,12 +26,12 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
   }
 });
 
-// Admin login
+// Admin Login
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById("email").value.trim();
-  const pin = document.getElementById("pin").value.trim();
+  const email = document.getElementById("loginEmail").value.trim();
+  const pin = document.getElementById("loginPin").value.trim();
 
   try {
     const response = await fetch(`${BASE_URL}/login`, {
@@ -57,7 +58,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   }
 });
 
-// Load pending users for admin
+// Admin: Load Pending Users
 async function loadUserRequests() {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/pending-users`);
@@ -72,24 +73,26 @@ async function loadUserRequests() {
       userRequestsDiv.innerHTML = users
         .map(
           (user) => `
-        <div class="user-request">
-          <p><strong>Email:</strong> ${user.email}</p>
-          <button onclick="approveUser('${user._id}')">Approve</button>
-          <button onclick="rejectUser('${user._id}')">Reject</button>
-        </div>
-      `
+          <div class="user-request">
+            <p><strong>Email:</strong> ${user.email}</p>
+            <button onclick="approveUser('${user._id}')">Approve</button>
+            <button onclick="rejectUser('${user._id}')">Reject</button>
+          </div>`
         )
         .join("");
     }
   } catch (error) {
     console.error("Error loading user requests:", error);
-    document.getElementById("userRequests").innerHTML = "<p>Error loading user requests.</p>";
+    document.getElementById("userRequests").innerHTML =
+      "<p>Error loading user requests.</p>";
   }
 }
 
 async function approveUser(userId) {
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, { method: "POST" });
+    const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, {
+      method: "POST",
+    });
     if (response.ok) {
       alert("User approved successfully.");
       loadUserRequests();
@@ -103,7 +106,9 @@ async function approveUser(userId) {
 
 async function rejectUser(userId) {
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, { method: "POST" });
+    const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, {
+      method: "POST",
+    });
     if (response.ok) {
       alert("User rejected successfully.");
       loadUserRequests();
