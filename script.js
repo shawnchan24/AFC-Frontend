@@ -120,6 +120,35 @@ async function rejectUser(userId) {
   }
 }
 
+// Load Gallery
+async function loadGallery() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/gallery`);
+    if (!response.ok) throw new Error("Failed to fetch gallery items.");
+
+    const items = await response.json();
+    const galleryContent = document.getElementById("galleryContent");
+
+    if (items.length === 0) {
+      galleryContent.innerHTML = "<p>No gallery items found.</p>";
+      return;
+    }
+
+    galleryContent.innerHTML = items
+      .map(
+        (item) => `
+          <div class="gallery-item">
+            <img src="${item.mediaUrl}" alt="${item.title}" />
+            <p>${item.title}</p>
+          </div>`
+      )
+      .join("");
+  } catch (error) {
+    console.error("Error loading gallery:", error);
+    document.getElementById("galleryContent").innerHTML = "<p>Failed to load gallery.</p>";
+  }
+}
+
 // Logout Functionality
 function logout() {
   localStorage.clear();
@@ -127,7 +156,11 @@ function logout() {
   window.location.href = "index.html";
 }
 
+// Load gallery on page load if on gallery page
 document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("galleryContent")) {
+    loadGallery();
+  }
   if (document.getElementById("userRequests")) {
     loadUserRequests();
   }

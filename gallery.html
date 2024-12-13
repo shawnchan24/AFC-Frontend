@@ -39,38 +39,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-/* script.js */
-const BASE_URL = "https://afc-backend-1.onrender.com"; // Updated backend URL
-
-// Load Gallery
-async function loadGallery() {
-  try {
-    const response = await fetch(`${BASE_URL}/api/gallery`);
-    if (!response.ok) throw new Error("Failed to fetch gallery items.");
-
-    const items = await response.json();
-    const galleryContent = document.getElementById("galleryContent");
-
-    if (items.length === 0) {
-      galleryContent.innerHTML = "<p>No gallery items found.</p>";
-      return;
-    }
-
-    galleryContent.innerHTML = items
-      .map(
-        (item) => `
-          <div class="gallery-item">
-            <img src="${item.mediaUrl}" alt="${item.title}" />
-            <p>${item.title}</p>
-          </div>`
-      )
-      .join("");
-  } catch (error) {
-    console.error("Error loading gallery:", error);
-    document.getElementById("galleryContent").innerHTML = "<p>Failed to load gallery.</p>";
-  }
-}
-
-// Load gallery on page load
-loadGallery();
