@@ -120,6 +120,13 @@ async function rejectUser(userId) {
   }
 }
 
+// Logout Functionality
+function logout() {
+  localStorage.clear();
+  alert("You have been logged out.");
+  window.location.href = "index.html";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("userRequests")) {
     loadUserRequests();

@@ -34,27 +34,34 @@
   </footer>
 
   <script>
+    const BASE_URL = "https://afc-backend-1.onrender.com"; // Update the backend URL
+
     async function loadPastEvents() {
       try {
-        const response = await fetch("http://localhost:5000/api/events");
+        const response = await fetch(`${BASE_URL}/api/events`);
         if (!response.ok) throw new Error("Failed to load events.");
         const events = await response.json();
         const container = document.getElementById("pastEvents");
 
-        container.innerHTML = events.map(event => `
-          <div class="card">
-            <h3>${event.title}</h3>
-            <p>${event.description}</p>
-            <img src="${event.mediaUrl}" alt="${event.title}" class="event-image">
-          </div>
-        `).join("");
+        if (events.length > 0) {
+          container.innerHTML = events.map(event => `
+            <div class="card">
+              <h3>${event.title}</h3>
+              <p>${event.description}</p>
+              <img src="${event.mediaUrl}" alt="${event.title}" class="event-image">
+            </div>
+          `).join("");
+        } else {
+          container.innerHTML = "<p>No past events found.</p>";
+        }
       } catch (error) {
         console.error("Error loading events:", error);
-        document.getElementById("pastEvents").textContent = "Failed to load events.";
+        document.getElementById("pastEvents").textContent = "Failed to load events. Please try again later.";
       }
     }
 
-    loadPastEvents();
+    // Load events on page load
+    document.addEventListener("DOMContentLoaded", loadPastEvents);
   </script>
 </body>
 </html>
