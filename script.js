@@ -88,35 +88,41 @@ async function loadUserRequests() {
   }
 }
 
+// Admin: Approve User and Assign PIN
 async function approveUser(userId) {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, {
       method: "POST",
     });
+
     if (response.ok) {
-      alert("User approved successfully.");
-      loadUserRequests();
+      alert("User approved successfully. They can now log in with their email and PIN: 1153.");
+      loadUserRequests(); // Refresh the pending user list
     } else {
-      alert("Failed to approve user.");
+      const data = await response.json();
+      alert(data.message || "Failed to approve user.");
     }
   } catch (error) {
-    console.error("Error approving user:", error);
+    console.error("Error approving user:", error.message);
   }
 }
 
+// Reject User
 async function rejectUser(userId) {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, {
       method: "POST",
     });
+
     if (response.ok) {
       alert("User rejected successfully.");
-      loadUserRequests();
+      loadUserRequests(); // Refresh the pending user list
     } else {
-      alert("Failed to reject user.");
+      const data = await response.json();
+      alert(data.message || "Failed to reject user.");
     }
   } catch (error) {
-    console.error("Error rejecting user:", error);
+    console.error("Error rejecting user:", error.message);
   }
 }
 
