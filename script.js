@@ -34,7 +34,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   const pin = document.getElementById("loginPin").value.trim();
 
   try {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/api/admin/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, pin }),
