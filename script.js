@@ -124,7 +124,10 @@ async function rejectUser(userId) {
 async function loadGallery() {
   try {
     const response = await fetch(`${BASE_URL}/api/gallery`);
-    if (!response.ok) throw new Error("Failed to fetch gallery items.");
+    if (!response.ok) {
+      console.error("Gallery API response:", await response.text()); // Log more details
+      throw new Error("Failed to fetch gallery items.");
+    }
 
     const items = await response.json();
     const galleryContent = document.getElementById("galleryContent");
