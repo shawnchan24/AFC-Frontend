@@ -14,15 +14,16 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
     });
 
     if (response.ok) {
+      const data = await response.json();
       document.getElementById("registerSuccess").textContent =
-        "Registration successful. Pending admin approval.";
+        data.message || "Registration successful. Pending admin approval.";
     } else {
       const data = await response.json();
-      alert(data.message || "Registration failed.");
+      alert(data.message || "Registration failed. Please check your input.");
     }
   } catch (error) {
     console.error("Error registering user:", error);
-    alert("Failed to register. Please try again.");
+    alert("Failed to register due to a network or server issue. Please try again.");
   }
 });
 
@@ -50,11 +51,12 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
         window.location.href = "homepage.html";
       }
     } else {
-      alert("Invalid email or PIN.");
+      const data = await response.json();
+      alert(data.message || "Invalid email or PIN.");
     }
   } catch (error) {
     console.error("Error logging in:", error);
-    alert("Failed to log in. Please try again.");
+    alert("Failed to log in due to a network or server issue. Please try again.");
   }
 });
 
@@ -84,7 +86,7 @@ async function loadUserRequests() {
   } catch (error) {
     console.error("Error loading user requests:", error);
     document.getElementById("userRequests").innerHTML =
-      "<p>Error loading user requests.</p>";
+      "<p>Error loading user requests. Please refresh the page.</p>";
   }
 }
 
@@ -96,7 +98,9 @@ async function approveUser(userId) {
     });
 
     if (response.ok) {
-      alert("User approved successfully. They can now log in with their email and PIN: 1153.");
+      alert(
+        "User approved successfully. They can now log in with their email and the assigned PIN: 1153."
+      );
       loadUserRequests(); // Refresh the pending user list
     } else {
       const data = await response.json();
@@ -104,6 +108,7 @@ async function approveUser(userId) {
     }
   } catch (error) {
     console.error("Error approving user:", error.message);
+    alert("Error approving user. Please try again.");
   }
 }
 
@@ -123,6 +128,7 @@ async function rejectUser(userId) {
     }
   } catch (error) {
     console.error("Error rejecting user:", error.message);
+    alert("Error rejecting user. Please try again.");
   }
 }
 
@@ -142,7 +148,58 @@ async function loadUserStats() {
   } catch (error) {
     console.error("Error loading user stats:", error);
     document.getElementById("userStats").innerHTML =
-      "<p>Failed to load user stats.</p>";
+      "<p>Failed to load user stats. Please refresh the page.</p>";
+  }
+}
+
+// Gallery: Load Photos
+async function loadGallery() {
+  try {
+    const response = await fetch(`${BASE_URL}/api/gallery/photos`);
+    if (!response.ok) throw new Error("Failed to load gallery photos.");
+
+    const photos = await response.json();
+    const galleryDiv = document.getElementById("photoGallery");
+
+    if (photos.length === 0) {
+      galleryDiv.innerHTML = "<p>No photos available in the gallery.</p>";
+    } else {
+      galleryDiv.innerHTML = photos
+        .map(
+          (photo) => `
+          <div class="gallery-item">
+            <img src="${photo.url}" alt="${photo.title}" />
+            <p>${photo.title}</p>
+          </div>`
+        )
+        .join("");
+    }
+  } catch (error) {
+    console.error("Error loading gallery:", error);
+    document.getElementById("photoGallery").innerHTML =
+      "<p>Error loading gallery photos. Please refresh the page.</p>";
+  }
+}
+
+// Gallery: Add Photo
+async function addPhotoToGallery(photo) {
+  try {
+    const response = await fetch(`${BASE_URL}/api/gallery/add-photo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(photo),
+    });
+
+    if (response.ok) {
+      alert("Photo added successfully to the gallery.");
+      loadGallery(); // Refresh the gallery
+    } else {
+      const data = await response.json();
+      alert(data.message || "Failed to add photo to the gallery.");
+    }
+  } catch (error) {
+    console.error("Error adding photo to gallery:", error);
+    alert("Error adding photo to the gallery. Please try again.");
   }
 }
 
@@ -160,5 +217,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (document.getElementById("userStats")) {
     loadUserStats();
+  }
+  if (document.getElementById("photoGallery")) {
+    loadGallery();
   }
 });
