@@ -3,21 +3,17 @@ const BASE_URL = "https://afc-backend-1.onrender.com"; // Backend URL
 // Registration
 document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const email = document.getElementById("registerEmail").value.trim();
-
   if (!email) {
     alert("Please enter a valid email address.");
     return;
   }
-
   try {
     const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
-
     if (response.ok) {
       const data = await response.json();
       document.getElementById("registerSuccess").textContent =
@@ -36,22 +32,18 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
 // Admin and User Login
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   const email = document.getElementById("loginEmail").value.trim();
   const pin = document.getElementById("loginPin").value.trim();
-
   if (!email || !pin) {
     alert("Both email and PIN are required.");
     return;
   }
-
   try {
     const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, pin }),
     });
-
     if (response.ok) {
       const data = await response.json();
       if (data.isAdmin) {
@@ -78,10 +70,8 @@ async function loadUserRequests() {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/pending-users`);
     if (!response.ok) throw new Error("Failed to fetch pending users.");
-
     const users = await response.json();
     const userRequestsDiv = document.getElementById("userRequests");
-
     if (users.length === 0) {
       userRequestsDiv.innerHTML = "<p>No pending user approvals.</p>";
     } else {
@@ -109,7 +99,6 @@ async function approveUser(userId) {
     const response = await fetch(`${BASE_URL}/api/admin/approve-user/${userId}`, {
       method: "POST",
     });
-
     if (response.ok) {
       alert("User approved successfully. They can now log in with PIN: 1153.");
       loadUserRequests(); // Refresh the pending user list
@@ -129,7 +118,6 @@ async function rejectUser(userId) {
     const response = await fetch(`${BASE_URL}/api/admin/reject-user/${userId}`, {
       method: "POST",
     });
-
     if (response.ok) {
       alert("User rejected successfully.");
       loadUserRequests(); // Refresh the pending user list
@@ -148,9 +136,7 @@ async function loadUserStats() {
   try {
     const response = await fetch(`${BASE_URL}/api/admin/user-stats`);
     if (!response.ok) throw new Error("Failed to fetch user stats.");
-
     const { totalUsers, onlineUsers } = await response.json();
-
     const userStatsDiv = document.getElementById("userStats");
     userStatsDiv.innerHTML = `
       <p><strong>Total Users:</strong> ${totalUsers}</p>
@@ -168,10 +154,8 @@ async function loadGallery() {
   try {
     const response = await fetch(`${BASE_URL}/api/gallery`);
     if (!response.ok) throw new Error("Failed to load gallery photos.");
-
     const photos = await response.json();
     const galleryDiv = document.getElementById("photoGallery");
-
     if (photos.length === 0) {
       galleryDiv.innerHTML = "<p>No photos available in the gallery.</p>";
     } else {
