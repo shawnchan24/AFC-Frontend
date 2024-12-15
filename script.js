@@ -6,6 +6,11 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
 
   const email = document.getElementById("registerEmail").value.trim();
 
+  if (!email) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/register`, {
       method: "POST",
@@ -27,15 +32,20 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
   }
 });
 
-// Admin Login
+// Admin and User Login
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("loginEmail").value.trim();
   const pin = document.getElementById("loginPin").value.trim();
 
+  if (!email || !pin) {
+    alert("Both email and PIN are required.");
+    return;
+  }
+
   try {
-    const response = await fetch(`${BASE_URL}/api/admin/login`, {
+    const response = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, pin }),
@@ -98,9 +108,7 @@ async function approveUser(userId) {
     });
 
     if (response.ok) {
-      alert(
-        "User approved successfully. They can now log in with their email and the assigned PIN: 1153."
-      );
+      alert("User approved successfully. They can now log in with PIN: 1153.");
       loadUserRequests(); // Refresh the pending user list
     } else {
       const data = await response.json();
@@ -155,7 +163,7 @@ async function loadUserStats() {
 // Gallery: Load Photos
 async function loadGallery() {
   try {
-    const response = await fetch(`${BASE_URL}/api/gallery/photos`);
+    const response = await fetch(`${BASE_URL}/api/gallery`);
     if (!response.ok) throw new Error("Failed to load gallery photos.");
 
     const photos = await response.json();
@@ -168,8 +176,8 @@ async function loadGallery() {
         .map(
           (photo) => `
           <div class="gallery-item">
-            <img src="${photo.url}" alt="${photo.title}" />
-            <p>${photo.title}</p>
+            <img src="${BASE_URL}${photo.url}" alt="${photo.caption}" />
+            <p>${photo.caption}</p>
           </div>`
         )
         .join("");
@@ -178,28 +186,6 @@ async function loadGallery() {
     console.error("Error loading gallery:", error);
     document.getElementById("photoGallery").innerHTML =
       "<p>Error loading gallery photos. Please refresh the page.</p>";
-  }
-}
-
-// Gallery: Add Photo
-async function addPhotoToGallery(photo) {
-  try {
-    const response = await fetch(`${BASE_URL}/api/gallery/add-photo`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(photo),
-    });
-
-    if (response.ok) {
-      alert("Photo added successfully to the gallery.");
-      loadGallery(); // Refresh the gallery
-    } else {
-      const data = await response.json();
-      alert(data.message || "Failed to add photo to the gallery.");
-    }
-  } catch (error) {
-    console.error("Error adding photo to gallery:", error);
-    alert("Error adding photo to the gallery. Please try again.");
   }
 }
 
