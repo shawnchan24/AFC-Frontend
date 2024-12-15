@@ -22,6 +22,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
       const data = await response.json();
       document.getElementById("registerSuccess").textContent =
         data.message || "Registration successful. Pending admin approval.";
+      document.getElementById("registerSuccess").style.color = "green";
     } else {
       const data = await response.json();
       alert(data.message || "Registration failed. Please check your input.");
@@ -56,9 +57,11 @@ document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
       if (data.isAdmin) {
         alert("Welcome, Admin!");
         window.location.href = "admin.html";
-      } else {
+      } else if (data.approved) {
         alert("Login successful!");
         window.location.href = "homepage.html";
+      } else {
+        alert("Your account is not yet approved. Please contact the admin.");
       }
     } else {
       const data = await response.json();
@@ -176,7 +179,7 @@ async function loadGallery() {
         .map(
           (photo) => `
           <div class="gallery-item">
-            <img src="${BASE_URL}${photo.url}" alt="${photo.caption}" />
+            <img src="${photo.url}" alt="${photo.caption}" />
             <p>${photo.caption}</p>
           </div>`
         )
